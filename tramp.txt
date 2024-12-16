@@ -1,0 +1,220 @@
+const exprereg = /^[\w]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3,}$/;
+const expreregnom = /^[A-Z]/;
+const exprerecont = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/;
+const emailinptu = document.getElementById('correo')
+const nominptu = document.getElementById('nombre')
+const continp = document.getElementById('contra')
+
+document.getElementById("enviar").addEventListener("click", function(event){
+    const email = emailinptu.value;
+    if (exprereg.test(email)) {
+        alert('correo valido');
+      } else {
+        alert('correo invalido');
+        
+      }
+
+    const nombre =  nominptu.value;
+    if (expreregnom.test(nombre)) {
+        alert('nombre valido');
+      } else {
+        alert('nombre invalido');
+        
+      }
+
+    const contra = continp.value; 
+    if(exprerecont.test(contra)){
+        alert('contra valida');
+    }else{
+        alert('contra invalida');
+    }
+})
+
+function generateMatrix1() {
+  const sizeInput = document.getElementById("sizeInput");
+  const matrixContainer = document.getElementById("matrixContainer");
+  const n = parseInt(sizeInput.value, 10);
+
+  // Limpiar el contenedor anterior
+  matrixContainer.innerHTML = "";
+
+  if (isNaN(n) || n < 1) {
+    matrixContainer.textContent = "Por favor, ingrese un número válido mayor a 0.";
+    return;
+  }
+
+  // Crear una matriz vacía
+  const matrix = Array.from({ length: n }, () => Array(n).fill(0));
+
+  // Llenar la matriz en forma de espiral
+  let value = 1;
+  let top = 0, bottom = n - 1, left = 0, right = n - 1;
+
+  while (value <= n * n) {
+    // Llenar la fila superior de izquierda a derecha
+    for (let i = left; i <= right; i++) {
+      matrix[top][i] = value++;
+    }
+    top++;
+
+    // Llenar la columna derecha de arriba a abajo
+    for (let i = top; i <= bottom; i++) {
+      matrix[i][right] = value++;
+    }
+    right--;
+
+    // Llenar la fila inferior de derecha a izquierda
+    for (let i = right; i >= left; i--) {
+      matrix[bottom][i] = value++;
+    }
+    bottom--;
+
+    // Llenar la columna izquierda de abajo a arriba
+    for (let i = bottom; i >= top; i--) {
+      matrix[i][left] = value++;
+    }
+    left++;
+  }
+
+  // Crear una tabla HTML para representar la matriz
+  const table = document.createElement("table");
+
+  for (let i = 0; i < n; i++) {
+    const row = document.createElement("tr");
+    for (let j = 0; j < n; j++) {
+      const cell = document.createElement("td");
+      cell.textContent = matrix[i][j]; // Llenar celda con el valor correspondiente
+      row.appendChild(cell);
+    }
+    table.appendChild(row);
+  }
+
+  // Agregar la tabla al contenedor
+  matrixContainer.appendChild(table);
+}
+
+
+
+
+function generateMatrix() {
+  const sizeInput = document.getElementById("sizeInput");
+  const matrixContainer = document.getElementById("matrixContainer");
+  const n = parseInt(sizeInput.value, 10);
+
+  // Limpiar el contenedor anterior
+  matrixContainer.innerHTML = "";
+
+  if (isNaN(n) || n < 1) {
+    matrixContainer.textContent = "Por favor, ingrese un número válido mayor a 0.";
+    return;
+  }
+
+  // Crear la primera matriz en forma de espiral
+  const spiralMatrix = Array.from({ length: n }, () => Array(n).fill(0));
+  let value = 1;
+  let top = 0, bottom = n - 1, left = 0, right = n - 1;
+
+  while (value <= n * n) {
+    for (let i = left; i <= right; i++) spiralMatrix[top][i] = value++;
+    top++;
+    for (let i = top; i <= bottom; i++) spiralMatrix[i][right] = value++;
+    right--;
+    for (let i = right; i >= left; i--) spiralMatrix[bottom][i] = value++;
+    bottom--;
+    for (let i = bottom; i >= top; i--) spiralMatrix[i][left] = value++;
+    left++;
+  }
+
+  // Crear la tabla para la matriz en espiral
+  const spiralTable = createTableFromMatrix(spiralMatrix);
+  matrixContainer.appendChild(spiralTable);
+
+  // Crear la segunda matriz con el patrón solicitado
+  const patternMatrix = generatePatternMatrix(n);
+
+  // Crear la tabla para la segunda matriz
+  const patternTable = createTableFromMatrix(patternMatrix);
+  matrixContainer.appendChild(patternTable);
+}
+
+function generatePatternMatrix(n) {
+  const matrix = Array.from({ length: n }, () => Array(n).fill(0));
+
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      // Llenar con el valor absoluto de la distancia al borde
+      const minDist = Math.min(i, j, n - i - 1, n - j - 1);
+      matrix[i][j] = minDist + 1;
+    }
+  }
+
+  return matrix;
+}
+
+function createTableFromMatrix(matrix) {
+  const table = document.createElement("table");
+  table.style.borderCollapse = "collapse";
+  matrix.forEach(row => {
+    const tr = document.createElement("tr");
+    row.forEach(cell => {
+      const td = document.createElement("td");
+      td.textContent = cell;
+      td.style.border = "1px solid #000";
+      td.style.width = "30px";
+      td.style.height = "30px";
+      td.style.textAlign = "center";
+      td.style.verticalAlign = "middle";
+      tr.appendChild(td);
+    });
+    table.appendChild(tr);
+  });
+  return table;
+}
+
+
+
+
+11111
+12221
+12321
+12221
+11111
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ejercicios</title>
+
+</head>
+<body>
+
+	<div class="input-box">
+		<span>Nombre</span>
+		<input type="text" placeholder="ingrese su nombre" id="nombre" >
+	</div>
+	<div class="input-box" >
+		<span>correo</span>
+		<input type="text" placeholder="ingrese correo" id="correo">
+	</div>
+	<div class="input-box">
+		<span>contrasenna</span>
+		<input type="text" placeholder="ingrese contrasenna" id="contra">
+	</div>
+
+	<button id="enviar">Enviar</button>
+	<!--<input type="submit">-->
+
+
+	<h1>Crear una matriz de tamaño n</h1>
+	<label for="sizeInput">Tamaño de la matriz (n):</label>
+	<input type="number" id="sizeInput" min="1" placeholder="Ingrese un número">
+	<button onclick="generateMatrix()">Generar Matriz</button>
+	
+	<div id="matrixContainer" class="matrix"></div>
+
+	<script type="text/javascript" src="ejer.js"></script>
+
+</body>
+</html>
+
